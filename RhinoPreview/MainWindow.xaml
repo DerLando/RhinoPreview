@@ -6,7 +6,23 @@
         xmlns:local="clr-namespace:RhinoPreview"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+    <Grid Background="LightGray" MouseWheel="Viewport_OnMouseWheel" KeyDown="UIElement_OnKeyDown" KeyUp="UIElement_OnKeyUp" MouseMove="UIElement_OnMouseMove" MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="5*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="4*"></RowDefinition>
+            <RowDefinition Height="4*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Viewport3D Name="Viewport" Grid.Column="1" Grid.Row="0" Grid.RowSpan="5"></Viewport3D>
+
+        <ListBox Name="lB_FileProperties" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"></ListBox>
+        <ListBox Name="lB_PickedObjectProps" Grid.Column="0" Grid.Row="1"></ListBox>
+        <!--<Slider Name="Slider_FOV" Maximum="100" ValueChanged="Slider_FOV_OnValueChanged" TickPlacement="BottomRight" TickFrequency="5" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center"></Slider>-->
+        <Button Name="btn_OpenFile" Content="Browse" Click="Btn_OpenFile_OnClick" Grid.Column="0" Grid.Row="2"></Button>
+        <Button Name="btn_OpenInRhino" Content="Open Rhino File" Click="Btn_OpenInRhino_OnClick" Grid.Column="0" Grid.Row="3"></Button>
     </Grid>
 </Window>
