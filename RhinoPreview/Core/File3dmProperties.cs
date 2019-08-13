@@ -56,7 +56,8 @@ namespace RhinoPreview.Core
             foreach (var file3dmObject in File3dm.Objects)
             {
                 // skip if not mesh (until we find out how to extract render meshes)
-                if (file3dmObject.Geometry.ObjectType != ObjectType.Mesh) continue;
+                var objectType = file3dmObject.Geometry.ObjectType;
+                if (objectType != ObjectType.Mesh && objectType != ObjectType.Brep) continue;
 
                 // create new empty geometry model
                 var geoModel = new GeometryModel3D();
@@ -65,7 +66,26 @@ namespace RhinoPreview.Core
                 geoModel.SetValue(IdKey, file3dmObject.Id);
 
                 // convert mesh to meshGeo
-                var mesh = (file3dmObject.Geometry as Mesh).ToMeshGeometry3D();
+                MeshGeometry3D mesh = new MeshGeometry3D();
+
+                if (objectType == ObjectType.Mesh)
+                {
+                    mesh = (file3dmObject.Geometry as Mesh).ToMeshGeometry3D();
+                }
+
+                if (objectType == ObjectType.Brep)
+                {
+                    var tempMesh = new Mesh();
+                    foreach (var face in (file3dmObject.Geometry as Brep).Faces)
+                    {
+                        tempMesh.Append(face.GetMesh(MeshType.Render));
+                    }
+
+                    tempMesh.Normals.ComputeNormals();
+                    tempMesh.Compact();
+
+                    mesh = tempMesh.ToMeshGeometry3D();
+                }
                 geoModel.Geometry = mesh;
 
                 // create material
